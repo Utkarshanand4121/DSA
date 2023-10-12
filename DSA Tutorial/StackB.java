@@ -98,12 +98,12 @@ public class StackB {
     public static String reverseString(String str) {
         Stack<Character> s = new Stack<>();
         int idx = 0;
-        while(idx<str.length()) {
+        while (idx < str.length()) {
             s.push(str.charAt(idx));
             idx++;
         }
         StringBuilder result = new StringBuilder("");
-        while(!s.isEmpty()) {
+        while (!s.isEmpty()) {
             char curr = s.pop();
             result.append(curr);
         }
@@ -112,7 +112,7 @@ public class StackB {
 
     // Reverse a Stack
     public static void reverse(Stack<Integer> s) {
-        if(s.empty()) {
+        if (s.empty()) {
             return;
         }
 
@@ -122,7 +122,7 @@ public class StackB {
     }
 
     public static void printStack(Stack<Integer> s) {
-        while(!s.isEmpty()) {
+        while (!s.isEmpty()) {
             System.out.println(s.pop());
         }
     }
@@ -133,13 +133,13 @@ public class StackB {
         span[0] = 1;
         s.push(1);
 
-        for(int i=0; i<stocks.length; i++) {
+        for (int i = 0; i < stocks.length; i++) {
             int currPrice = stocks[i];
-            while(!s.isEmpty() && currPrice > stocks[s.peek()]) {
+            while (!s.isEmpty() && currPrice > stocks[s.peek()]) {
                 s.pop();
             }
-            if(s.isEmpty()) {
-                span[i] = i+1;
+            if (s.isEmpty()) {
+                span[i] = i + 1;
             } else {
                 int prevHigh = s.peek();
                 span[i] = i - prevHigh;
@@ -148,13 +148,70 @@ public class StackB {
             s.push(i);
         }
     }
-    public static void main(String[] args) {
-        int stocks[] = {100,80,60,70,60,85,100};
-        int span[] = new int[stocks.length];
-        stockSpan(stocks, span);
 
-        for(int i=0; i<span.length; i++) {
-            System.out.println(span[i]+" ");
+    // Valid Parentheses
+    public static boolean isValid(String str) {
+        Stack<Character> s = new Stack<>();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            // opening
+            if (ch == '(' || ch == '{' || ch == '[') { // Opening
+                s.push(ch);
+            } else {
+                // Closing
+                if (s.isEmpty()) {
+                    return false;
+                }
+                if ((s.peek() == '(' && ch == ')') // ()
+                        || (s.peek() == '{' && ch == '}') // {}
+                        || (s.peek() == '[' && ch == ']')) { // []
+                    s.pop();
+                } else {
+                    return false;
+                }
+            }
         }
+        if (s.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Duplicate Parentheses
+    public static boolean isDuplicate(String str) {
+        Stack<Character> s = new Stack<>();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            // Closing
+            if (ch == ')') {
+                int count = 0;
+                while (s.pop() != '(') {
+                    count++;
+                }
+                if (count < 1) {
+                    return true; // duplicate
+                }
+                // } else {
+                // s.pop(); // opening pair
+                // }
+            } else {
+                // Opening
+                s.push(ch);
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String str = "((a+b))";
+        String str2 = "(a-b)";
+        System.out.println(isDuplicate(str));
+        System.out.println(isDuplicate(str2));
     }
 }

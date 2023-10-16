@@ -317,6 +317,21 @@ public class Queues {
             q.add(q.remove());
         }
     }
+
+    // Reverse Queue
+    public static void reverse(Queue<Integer> q) {
+        Stack<Integer> s = new Stack<>();
+
+        while(!q.isEmpty()) {
+            s.push(q.remove());
+        }
+
+        while(!s.isEmpty()) {
+            q.add(s.pop());
+        }
+    }
+
+    
     public static void main(String[] args) {
         // LLQueue q = new LLQueue();
         // q.add(1);
@@ -365,23 +380,41 @@ public class Queues {
         // String str = "aabccxb";
         // printNonRepeating(str);
 
-        Queue<Integer> q = new LinkedList<>();
-        q.add(1);
-        q.add(2);
-        q.add(3);
-        q.add(4);
-        q.add(5);
-        q.add(6);
-        q.add(7);
-        q.add(8);
-        q.add(9);
-        q.add(10);
+    //     Queue<Integer> q = new LinkedList<>();
+    //     q.add(1);
+    //     q.add(2);
+    //     q.add(3);
+    //     q.add(4);
+    //     q.add(5);
+    //     q.add(6);
+    //     q.add(7);
+    //     q.add(8);
+    //     q.add(9);
+    //     q.add(10);
 
-        interLeave(q);
+    //     interLeave(q);
 
-        while(!q.isEmpty()) {
-            System.out.print(q.remove()+" ");
-        }
-        System.out.println();
-    }
+    //     while(!q.isEmpty()) {
+    //         System.out.print(q.remove()+" ");
+    //     }
+    //     System.out.println();
+    // }
+
+    // Reverse a queue
+
+    // Queue<Integer> q = new LinkedList<>();
+    // q.add(1);
+    // q.add(2);
+    // q.add(3);
+    // q.add(4);
+    // q.add(5);
+
+    // reverse(q);
+
+    // // print Q
+    // while(!q.isEmpty()) {
+    //     System.out.print(q.remove()+" ");
+    // }
+    // System.out.println();
+}
 }

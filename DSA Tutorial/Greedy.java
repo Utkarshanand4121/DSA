@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.util.Comparator;
 
 public class Greedy {
     public static void greedy1() {
@@ -69,7 +69,59 @@ public class Greedy {
 
     }
 
+    public static void greedy3() {
+        int val[] = {60,100,120};
+        int weight[] = {10,20,30};
+        int w = 50;
+
+        double ratio[][] = new double[val.length][2];
+        // 0th col => idx; 1st col => ratio
+
+        for(int i=0; i<val.length; i++) {
+            ratio[i][0] = i;
+            ratio[i][1] = val[i]/(double) weight[i];
+        }
+        // ascending order
+        Arrays.sort(ratio, Comparator.comparingDouble(o -> o[1]));
+
+        int capacity = w;
+        int finalVal = 0;
+        for(int i=ratio.length-1; i>=0; i--) {
+            int idx = (int)ratio[i][0];
+            if(capacity >= weight[idx]) { //include full item
+                finalVal += val[idx];
+                capacity -= weight[idx];
+            } else {
+                // include fractional item
+                finalVal += (ratio[i][1] * capacity);
+                capacity = 0;
+                break;
+            }
+        }
+
+        System.out.println("final value = " + finalVal);
+    }
+
+    public static void greedy4() { // O(nlogn)
+        int A[] = {1,2,3};
+        int B[] = {2,1,3};
+
+        Arrays.sort(A);
+        Arrays.sort(B);
+
+        int minDiff = 0;
+
+        for(int i=0; i<A.length; i++) {
+            minDiff += Math.abs(A[i] - B[i]);
+        }
+
+        System.out.println("min absolute diff of pairs = " + minDiff);
+    }
+
+    public static void greedy5() {
+        
+    }
     public static void main(String[] args) {
-        greedy2();
+        greedy3();
     }
 }

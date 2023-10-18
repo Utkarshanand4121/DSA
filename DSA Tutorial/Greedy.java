@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.Comparator;
+import java.util.Arrays;
 
 public class Greedy {
     public static void greedy1() {
@@ -122,6 +123,6 @@ public class Greedy {
         
     }
     public static void main(String[] args) {
-        greedy3();
+        greedy1();
     }
 }

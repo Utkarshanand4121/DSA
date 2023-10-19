@@ -1,6 +1,6 @@
-import java.util.*;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.*;
 
 public class Greedy {
     public static void greedy1() {
@@ -119,25 +119,93 @@ public class Greedy {
         System.out.println("min absolute diff of pairs = " + minDiff);
     }
 
-    public static void greedy5() {
+    public static void greedy5() { // O(nlogn)
         int pairs[][] = { { 5, 24 }, { 39, 60 }, { 5, 28 }, { 27, 40 }, { 50, 90 } };
 
-        Arrays.sort(pairs, Comparator.comparingDouble(o->o[1]));
+        Arrays.sort(pairs, Comparator.comparingDouble(o -> o[1]));
 
         int chainLen = 1;
         int chainEnd = pairs[0][1]; // Last selected pair end // chain end
 
-        for(int i=1; i<pairs.length; i++) {
-            if(pairs[i][0] > chainEnd) {
+        for (int i = 1; i < pairs.length; i++) {
+            if (pairs[i][0] > chainEnd) {
                 chainLen++;
                 chainEnd = pairs[i][1];
             }
         }
 
-        System.out.println("max length of chain = " +chainLen);
+        System.out.println("max length of chain = " + chainLen);
+    }
+
+    public static void greedy6() {
+        Integer coins[] = { 1, 2, 5, 10, 20, 50, 100, 500, 2000 };
+
+        Arrays.sort(coins, Comparator.reverseOrder());
+
+        int countOfCoins = 0;
+        int amount = 1590;
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 0; i < coins.length; i++) {
+            if (coins[i] <= amount) {
+                while (coins[i] <= amount) {
+                    countOfCoins++;
+                    ans.add(coins[i]);
+                    amount -= coins[i];
+                }
+            }
+        }
+
+        System.out.println("total (min) coins used = " + countOfCoins);
+
+        for (int i = 0; i < ans.size(); i++) {
+            System.out.print(ans.get(i) + " ");
+        }
+    }
+
+    static class Job {
+        int deadline;
+        int profit;
+        int id; // 0(A), 1(B), 2(C)
+
+        public Job(int i, int d, int p) {
+            id = i;
+            deadline = d;
+            profit = p;
+        }
+    }
+
+    public static void greedy7() {
+
+        int jobsInfo[][] = { { 4, 20 }, { 1, 10 }, { 1, 40 }, { 1, 30 } };
+
+        ArrayList<Job> jobs = new ArrayList<>();
+
+        for (int i = 0; i < jobsInfo.length; i++) {
+            jobs.add(new Job(i, jobsInfo[i][0], jobsInfo[i][1]));
+        }
+
+        Collections.sort(jobs, (obj1, obj2) -> obj2.profit - obj1.profit); // decending
+
+        ArrayList<Integer> seq = new ArrayList<>();
+        int time = 0;
+        for(int i=0; i<jobs.size(); i++) {
+            Job curr = jobs.get(i);
+            if(curr.deadline > time) {
+                seq.add(curr.id);
+                time++;
+            }
+        }
+
+        // print sequence
+        System.out.println("max jobs = " + seq.size());
+        for(int i=0; i<seq.size(); i++) {
+            System.out.print(seq.get(i)+" ");
+        }
+        System.out.println();
     }
 
     public static void main(String[] args) {
-        greedy5();
+        greedy7();
     }
 }

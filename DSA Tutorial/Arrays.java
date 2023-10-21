@@ -189,6 +189,6 @@ public class Arrays {
 
     public static void main(String args[]) {
         int prices[] = { 4, 2, 0, 3, 2, 5 };
-        System.out.println(trappedRain(prices));
+        subarray(prices);
     }
 }

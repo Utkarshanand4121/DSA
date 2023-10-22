@@ -101,7 +101,7 @@ public class BinaryTrees {
     }
 
     public static int count(Node root) {
-        if(root == null) {
+        if (root == null) {
             return 0;
         }
 
@@ -112,7 +112,7 @@ public class BinaryTrees {
 
     // Sum
     public static int sum(Node root) {
-        if(root == null) {
+        if (root == null) {
             return 0;
         }
         int leftSum = sum(root.left);
@@ -122,7 +122,7 @@ public class BinaryTrees {
 
     // diameter
     public static int diameter(Node root) { // O(N^2)
-        if(root == null) {
+        if (root == null) {
             return 0;
         }
 
@@ -146,7 +146,7 @@ public class BinaryTrees {
     }
 
     public static Info diameter2(Node root) { // O(n)
-        if(root == null) {
+        if (root == null) {
             return new Info(0, 0);
         }
         Info leftInfo = diameter2(root.left);
@@ -160,33 +160,85 @@ public class BinaryTrees {
 
     // Sub Tree
     public static boolean isIdentical(Node node, Node subRoot) {
-        if(node == null && subRoot == null) {
+        if (node == null && subRoot == null) {
             return true;
-        }
-         else if(node == null || subRoot == null || node.data != subRoot.data) {
+        } else if (node == null || subRoot == null || node.data != subRoot.data) {
             return false;
         }
-        if(!isIdentical(node.left, subRoot.left)) {
+        if (!isIdentical(node.left, subRoot.left)) {
             return false;
         }
-        if(!isIdentical(node.right, subRoot.right)) {
+        if (!isIdentical(node.right, subRoot.right)) {
             return false;
         }
         return true;
     }
+
     public static boolean isSubtree(Node root, Node subRoot) {
 
-        if(root == null) {
+        if (root == null) {
             return false;
         }
-        if(root.data == subRoot.data) {
-            if(isIdentical(root, subRoot)) {
+        if (root.data == subRoot.data) {
+            if (isIdentical(root, subRoot)) {
                 return true;
             }
         }
         return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
-        
+
     }
+
+    // Top view
+    static class Info2 {
+        Node node;
+        int hd;
+
+        public Info2(Node node, int hd) {
+            this.node = node;
+            this.hd = hd;
+        }
+    }
+
+    public static void topView(Node root) {
+        // Level Order
+        Queue<Info2> q = new LinkedList<>();
+        HashMap<Integer, Node> map = new HashMap<>();
+
+        int min = 0, max = 0;
+        q.add(new Info2(root, 0));
+        q.add(null);
+
+        while (!q.isEmpty()) {
+            Info2 curr = q.remove();
+            if (curr == null) {
+                if (q.isEmpty()) {
+                    break;
+                } else {
+                    q.add(null);
+                }
+            } else {
+                if (!map.containsKey(curr.hd)) { // first time my hd is occurring
+                    map.put(curr.hd, curr.node);
+                }
+
+                if (curr.node.left != null) {
+                    q.add(new Info2(curr.node.left, curr.hd - 1));
+                    min = Math.min(min, curr.hd - 1);
+                }
+                if (curr.node.right != null) {
+                    q.add(new Info2(curr.node.right, curr.hd + 1));
+                    max = Math.max(max, curr.hd + 1);
+                }
+            }
+
+        }
+
+        for (int i = min; i <= max; i++) {
+            System.out.print(map.get(i).data + " ");
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
         // int nodes[] = {1,2,4,-1,-1,5,-1,-1,3,-1,6,-1,-1};
         // BinaryTree tree = new BinaryTree();
@@ -199,7 +251,7 @@ public class BinaryTrees {
          *   / \
          *  2   3
          * / \ / \
-         * 4 5 6  7
+         * 4 5 6 7
          */
         Node root = new Node(1);
         root.left = new Node(2);
@@ -211,22 +263,23 @@ public class BinaryTrees {
 
         // System.out.println(height(root));
 
-        //System.out.println(count(root));
+        // System.out.println(count(root));
 
         // System.out.println(sum(root));
 
         // System.out.println(diameter2(root).diam);
         // System.out.println(diameter2(root).ht);
 
-        /* 
-                    2
-                   / \
-                  4   5   
+        /*
+         *  2
+         * / \
+         * 4 5
          */
-        Node subRoot = new Node(2);
-        subRoot.left = new Node(4);
+        // Node subRoot = new Node(2);
+        // subRoot.left = new Node(4);
         // subRoot.right = new Node(5);
 
-        System.out.println(isSubtree(root, subRoot));
+        // System.out.println(isSubtree(root, subRoot));
+        topView(root);
     }
 }

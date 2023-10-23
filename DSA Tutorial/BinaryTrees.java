@@ -369,6 +369,33 @@ public class BinaryTrees {
         }
         return max + 1;
     }
+
+    // Transform to sum tree
+    public static int transform(Node root) {
+        if(root == null) {
+            return 0;
+        }
+
+        int leftChild = transform(root.left);
+        int rightChild = transform(root.right);
+
+        int data = root.data;
+
+        int newLeft = root.left == null ? 0 : root.left.data;
+        int newRight = root.right == null ? 0 : root.right.data;
+        root.data = newLeft + leftChild + newRight + rightChild;
+        return data;
+    }
+
+    public static void preorder(Node root) {
+        if(root == null) {
+            return;
+        }
+
+        System.out.print(root.data + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
     public static void main(String[] args) {
         // int nodes[] = {1,2,4,-1,-1,5,-1,-1,3,-1,6,-1,-1};
         // BinaryTree tree = new BinaryTree();
@@ -415,8 +442,11 @@ public class BinaryTrees {
         // int k = 3;
         // KLevel(root, 1, k);
 
-        int n1 = 4, k = 2;
+        // int n1 = 4, k = 2;
         //System.out.println(minDis(root, n1, n2));
-        KAncestor(root, n1, k);
+        // KAncestor(root, n1, k);
+
+        transform(root);
+        preorder(root);
     }
 }

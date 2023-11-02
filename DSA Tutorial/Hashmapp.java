@@ -22,6 +22,33 @@ public class Hashmapp {
             }
         }
     }
+
+    public static boolean isAnangram(String s, String t) { // O(n)
+        if(s.length() != t.length()) {
+            return false;
+        }
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for(int i=0; i<s.length(); i++) {
+            char ch = s.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        for(int i=0; i<t.length(); i++) {
+            char ch = t.charAt(i);
+            if(map.get(ch) != null) {
+                if(map.get(ch) == 1) {
+                    map.remove(ch);
+                } else {
+                    map.put(ch, map.get(ch) - 1);
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return map.isEmpty();
+    }
     public static void main(String[] args) {
         // Create
         // HashMap<String, Integer> hm = new HashMap<>();
@@ -70,6 +97,30 @@ public class Hashmapp {
         // lhm.put("US", 50);
         // System.out.println(lhm);
 
-        majorityEle();
+        // majorityEle();
+
+        // String s = "tulip";
+        // String t = "lipid";
+
+        // System.out.println(isAnangram(s, t));
+
+        HashSet<Integer> set = new HashSet<>();
+
+        set.add(1);
+        set.add(2);
+        set.add(4);
+        set.add(2);
+        set.add(1);
+
+        System.out.println(set);
+        set.clear();
+        System.out.println(set.size());
+        System.out.println(set.isEmpty());
+        // set.remove(2);
+        // if(set.contains(2)) {
+        //     System.out.println("set contains 2");
+        // } 
+        
+
     }
 }

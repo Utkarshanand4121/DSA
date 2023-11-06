@@ -29,7 +29,7 @@ public class Graphs {
 
         // 2-vertices
         graph[2].add(new Edge(2, 0, 1));
-        graph[0].add(new Edge(2, 4, 4));
+        graph[2].add(new Edge(2, 4, 4));
 
         // 3-vertices
         graph[3].add(new Edge(3, 1, 3));
@@ -42,9 +42,9 @@ public class Graphs {
         graph[4].add(new Edge(4, 5, 2));
 
         // 5-vertices
-        graph[5].add(new Edge(4, 3, 2));
-        graph[5].add(new Edge(4, 4, 2));
-        graph[5].add(new Edge(4, 6, 2));
+        graph[5].add(new Edge(5, 3, 2));
+        graph[5].add(new Edge(5, 4, 2));
+        graph[5].add(new Edge(5, 6, 2));
         graph[5].add(new Edge(6, 5, 1));
 
         // 2's neighour
@@ -71,6 +71,35 @@ public class Graphs {
             }
         }
     }
+
+    public static void dfs(ArrayList<Edge>[] graph, int curr, boolean vis[]) { // O(V+E)
+        // visit
+        System.out.print(curr + " ");
+        vis[curr] = true;
+
+        for(int i=0; i<graph[curr].size(); i++) {
+            Edge e = graph[curr].get(i);
+            if(!vis[e.dest]) {
+                dfs(graph, e.dest, vis);
+            }
+        }
+    }
+
+    // O(V+E)
+    public static boolean hasPath(ArrayList<Edge>[] graph, int src, int dest, boolean vis[]) {
+        if(src == dest) {
+            return true;
+        }
+        vis[src] = true;
+        for(int i=0; i<graph[src].size(); i++) {
+            Edge e = graph[src].get(i);
+            // e.dest = neighbour
+            if(!vis[e.dest] && hasPath(graph, e.dest, dest, vis)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
         int V = 7;
         ArrayList<Edge> graph[] = new ArrayList[V];
@@ -80,5 +109,9 @@ public class Graphs {
         }
         createGraph(graph);
         Bfs(graph);
+        System.out.println();
+        //dfs(graph, 0, new boolean[V]);
+
+        System.out.println(hasPath(graph, 0, 5, new boolean[V]));
     }
 }

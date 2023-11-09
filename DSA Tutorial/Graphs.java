@@ -324,6 +324,60 @@ public class Graphs {
 
         s.push(curr);
     }
+
+    // Topological sort -- BFS
+    static void createGraph4(ArrayList<Edge2> graph[]) {
+        for(int i=0; i<graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        graph[2].add(new Edge2(2, 3));
+
+        graph[3].add(new Edge2(3, 1));
+
+        graph[4].add(new Edge2(4, 0));
+        graph[4].add(new Edge2(4, 1));
+
+        graph[5].add(new Edge2(5, 0));
+        graph[5].add(new Edge2(5, 2));
+    }
+
+    public static void calIndeg(ArrayList<Edge2> graph[], int indeg[]) {
+        for(int i=0; i<graph.length; i++) {
+            int v = i;
+            for(int j=0; j<graph[v].size(); j++) {
+                Edge2 e = graph[v].get(j);
+                indeg[e.dest]++;
+            }
+        }
+    }
+    public static void topSort2(ArrayList<Edge2> graph[]) {
+        int indeg[] = new int[graph.length];
+        calIndeg(graph, indeg);
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int i=0; i<indeg.length; i++) {
+            if(indeg[i] == 0) {
+                q.add(i);
+            }
+        }
+
+        // bfs
+        while(!q.isEmpty()) {
+            int curr = q.remove();
+            System.out.print(curr+" "); // topological sort
+
+            for(int i=0; i<graph[curr].size(); i++) {
+                Edge2 e = graph[curr].get(i);
+                indeg[e.dest]--;
+                if(indeg[e.dest] == 0) {
+                    q.add(e.dest);
+                }
+            }
+        }
+
+        System.out.println();
+    }
     public static void main(String[] args) {
         // int V = 7;
         // ArrayList<Edge> graph[] = new ArrayList[V];
@@ -338,15 +392,15 @@ public class Graphs {
 
         // System.out.println(hasPath(graph, 0, 5, new boolean[V]));
 
-        int V = 5;
+        int V = 6;
         ArrayList<Edge2> graph[] = new ArrayList[V];
         // createGraph2(graph);
 
         //System.out.println(detectCycle(graph));
         // System.out.println(isBipartile(graph));
-        createGraph3(graph);
+        createGraph4(graph);
         // System.out.println(isCycle(graph));
 
-        topSort(graph);
+        topSort2(graph);
     }
 }

@@ -330,7 +330,7 @@ public class Graphs {
         for(int i=0; i<graph.length; i++) {
             graph[i] = new ArrayList<>();
         }
-
+        graph[0].add(new Edge2(0, 3));
         graph[2].add(new Edge2(2, 3));
 
         graph[3].add(new Edge2(3, 1));
@@ -378,6 +378,91 @@ public class Graphs {
 
         System.out.println();
     }
+
+    // All path from source to target
+    public static void printAllPath(ArrayList<Edge2> graph[], int src, int dest, String path) {
+        if(src == dest) {
+            System.out.println(path+dest);
+            return;
+        }
+
+        for(int i=0; i<graph[src].size(); i++) {
+            Edge2 e = graph[src].get(i);
+            printAllPath(graph, e.dest, dest, path+src);
+        }
+    }
+
+    // Dijkstra's Algorithm
+    static void createGraph5(ArrayList<Edge> graph[]) {
+        for(int i=0; i<graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        graph[0].add(new Edge(0, 1, 2));
+        graph[0].add(new Edge(0, 2, 4));
+
+        graph[1].add(new Edge(1, 3, 7));
+        graph[1].add(new Edge(1, 2, 1));
+
+        graph[2].add(new Edge(2, 4, 3));
+
+        graph[3].add(new Edge(3, 5, 1));
+
+        graph[4].add(new Edge(4, 3, 2));
+        graph[4].add(new Edge(4, 5, 5));
+    }
+
+    static class Pair implements Comparable<Pair> {
+        int n;
+        int path;
+
+        public Pair(int n, int path) {
+            this.n = n;
+            this.path = path;
+        }
+
+        @Override
+        public int compareTo(Pair p2) {
+            return this.path - p2.path;
+        }
+    }
+    public static void dijkstra(ArrayList<Edge> graph[], int src) {
+        int dist[] = new int[graph.length]; // dist[i] -> src to i
+        for(int i=0; i<graph.length; i++) {
+            if(i != src){
+                dist[i] = Integer.MAX_VALUE; // +infinity
+            }
+        }
+
+        boolean vis[] = new boolean[graph.length];
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        pq.add(new Pair(src, 0));
+        // loop
+        while(!pq.isEmpty()) {
+            Pair curr = pq.remove();
+            if(!vis[curr.n]) {
+                vis[curr.n] = true;
+                // neighours
+                for(int i=0; i<graph[curr.n].size(); i++) {
+                    Edge e = graph[curr.n].get(i);
+                    int u = e.src;
+                    int v = e.dest;
+                    int wt = e.wt;
+
+                    if(dist[u]+wt < dist[v]) { // update distance of src to v
+                        dist[v] = dist[u] + wt;
+                        pq.add(new Pair(v, dist[v]));
+                    }
+                }
+            }
+        }
+
+        // print all source to vertices shortest dist
+        for(int i=0; i<dist.length; i++) {
+            System.out.print(dist[i]+" ");
+        }
+        System.out.println();
+    }
     public static void main(String[] args) {
         // int V = 7;
         // ArrayList<Edge> graph[] = new ArrayList[V];
@@ -392,15 +477,24 @@ public class Graphs {
 
         // System.out.println(hasPath(graph, 0, 5, new boolean[V]));
 
-        int V = 6;
-        ArrayList<Edge2> graph[] = new ArrayList[V];
+        // int V = 6;
+        // ArrayList<Edge2> graph[] = new ArrayList[V];
         // createGraph2(graph);
 
         //System.out.println(detectCycle(graph));
         // System.out.println(isBipartile(graph));
-        createGraph4(graph);
+        // createGraph4(graph);
         // System.out.println(isCycle(graph));
 
-        topSort2(graph);
+        // topSort2(graph);
+
+        // int src = 5, dest = 1;
+        // printAllPath(graph, src, dest, "");
+
+        int V = 6;
+        ArrayList<Edge> graph[] = new ArrayList[V];
+        int src = 0;
+        createGraph5(graph);
+        dijkstra(graph, src);
     }
 }

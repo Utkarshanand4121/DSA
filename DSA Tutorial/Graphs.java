@@ -515,6 +515,62 @@ public class Graphs {
         }
         System.out.println();
     }
+
+    // Prim's Algorithm
+    static void createGraph7(ArrayList<Edge> graph[]) {
+        for(int i=0; i<graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        graph[0].add(new Edge(0, 1, 10));
+        graph[0].add(new Edge(0, 2, 15));
+        graph[0].add(new Edge(0, 3, 30));
+
+        graph[1].add(new Edge(1, 0, 10));
+        graph[1].add(new Edge(1, 3, 40));
+
+        graph[2].add(new Edge(2, 0, 15));
+        graph[2].add(new Edge(2, 0, 50));
+
+        graph[3].add(new Edge(3, 1, 40));
+        graph[3].add(new Edge(3, 2, 50));
+    } 
+
+    static class Pair2 implements Comparable<Pair2>{
+        int v;
+        int costs;
+
+        public Pair2(int v, int c) {
+            this.v = v;
+            this.costs = c;
+        }
+
+        @Override
+        public int compareTo(Pair2 p2) {
+            return this.costs - p2.costs;
+        }
+    }
+    public static void prims(ArrayList<Edge> graph[]) {
+        boolean vis[] = new boolean[graph.length];
+        PriorityQueue<Pair2> pq = new PriorityQueue<>();
+        pq.add(new Pair2(0, 0));
+        int finalCost = 0; //MST Cost/ total min Weight
+
+        while(!pq.isEmpty()) {
+            Pair2 curr = pq.remove();
+            if(!vis[curr.v]) {
+                vis[curr.v] = true;
+                finalCost += curr.costs;
+
+                for(int i=0; i<graph[curr.v].size(); i++) {
+                    Edge e = graph[curr.v].get(i);
+                    pq.add(new Pair2(e.dest, e.wt));
+                }
+            }
+        }
+
+        System.out.println("final(min) costs of mst : "+finalCost);
+    }
     public static void main(String[] args) {
         // int V = 7;
         // ArrayList<Edge> graph[] = new ArrayList[V];
@@ -543,12 +599,14 @@ public class Graphs {
         // int src = 5, dest = 1;
         // printAllPath(graph, src, dest, "");
 
-        int V = 5;
+        int V = 4;
         ArrayList<Edge> graph[] = new ArrayList[V];
         int src = 0;
-        createGraph6(graph);
+        createGraph7(graph);
         //dijkstra(graph, src);
 
-        bellmanFord(graph, src);
+        //bellmanFord(graph, src);
+
+        prims(graph);
     }
 }

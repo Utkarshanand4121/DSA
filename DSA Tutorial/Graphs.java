@@ -786,6 +786,82 @@ public class Graphs {
         helper(image, sr, sc, color, vis, image[sr][sc]);
         return image;
     }
+
+    // Strongly Connected Component -- Kosaraju's Algorithm
+    public static void createGraph8(ArrayList<Edge2> graph[]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<Edge2>();
+        }
+        graph[0].add(new Edge2(0, 2));
+        graph[0].add(new Edge2(0, 3));
+
+        graph[1].add(new Edge2(1, 0));
+
+        // graph[2].add(new Edge2(2, 0));
+        graph[2].add(new Edge2(2, 1));
+
+        graph[3].add(new Edge2(3, 4));
+
+        // graph[4].add(new Edge2(4, 3));
+    }
+
+    public static void topSort(ArrayList<Edge2> graph[], int curr, boolean vis[], Stack<Integer> s) {
+        vis[curr] = true;
+
+        for(int i=0; i<graph[curr].size(); i++) {
+            Edge2 e = graph[curr].get(i);
+            if(!vis[e.dest]) {
+                topSort(graph, e.dest, vis, s);
+            }
+        }
+        s.push(curr);
+    }
+
+    public static void dfs(ArrayList<Edge2> graph[], int curr, boolean vis[]) {
+        vis[curr] = true;
+        System.out.print(curr + " ");
+
+        for(int i=0; i<graph[curr].size(); i++) {
+            Edge2 e = graph[curr].get(i);
+            if(!vis[e.dest]) {
+                dfs(graph, e.dest, vis);
+            }
+        }
+    }
+    public static void kosaraju(ArrayList<Edge2> graph[], int V) { // O(V+E)
+        // Step 1
+        Stack<Integer> s = new Stack<>();
+        boolean vis[] = new boolean[V];
+        for(int i=0; i<V; i++) {
+            if(!vis[i]) {
+                topSort(graph, i, vis, s);
+            }
+        }
+
+        // Step 2
+        ArrayList<Edge2> transpose[] = new ArrayList[V];
+        for(int i=0; i<graph.length; i++) {
+            vis[i] = false;
+            transpose[i] = new ArrayList<Edge2>();
+        }
+
+        for(int i=0; i<V; i++) {
+            for(int j=0; j<graph[i].size(); j++) {
+                Edge2 e = graph[i].get(j); // e.src -> e.dest
+                transpose[e.dest].add(new Edge2(e.dest, e.src)); // reverse Edge
+            }
+        }
+
+        // Step3
+        while(!s.isEmpty()) {
+            int curr = s.pop();
+            if(!vis[curr]) {
+                System.out.print("SCC -> ");
+                dfs(transpose, curr, vis); // scc
+                System.out.println();
+            }
+        }
+    }
     public static void main(String[] args) {
         // int V = 7;
         // ArrayList<Edge> graph[] = new ArrayList[V];
@@ -839,9 +915,14 @@ public class Graphs {
         //         { 4, 7, 0, 0, 0 } };
         // System.out.println(connectCities(cities));
 
-        int V = 4;
-        ArrayList<Edge4> edges = new ArrayList<>();
-        createGraphss(edges);
-        kruskalsMST(edges, V);
+        // int V = 4;
+        // ArrayList<Edge4> edges = new ArrayList<>();
+        // createGraphss(edges);
+        // kruskalsMST(edges, V);
+
+        int V = 5;
+        ArrayList<Edge2> graph[] = new ArrayList[V];
+        createGraph8(graph);
+        kosaraju(graph, V);
     }
 }

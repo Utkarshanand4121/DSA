@@ -923,6 +923,57 @@ public class Graphs {
             }
         }
     }
+
+    // Articulation Point
+    // O(V+E)
+    public static void dfs2(ArrayList<Edge2> graph[], int curr,int par, int dt[], int low[], int time, boolean vis[], boolean ap[]) {
+        vis[curr] = true;
+        dt[curr] = low[curr] = ++time;
+        int children = 0;
+        // System.out.print(curr + " ");
+
+        for(int i=0; i<graph[curr].size(); i++) {
+            Edge2 e = graph[curr].get(i); // e.src --- e.dest
+            int neigh = e.dest;
+            if(par == neigh) {
+                continue;
+            }
+            else if(vis[neigh]) {
+                low[curr] = Math.min(low[curr], low[neigh]);
+            } else {
+                dfs2(graph, neigh, curr, dt, low, time, vis, ap);
+                low[curr] = Math.min(low[curr], low[neigh]);
+                if(par != -1 && dt[curr] <= low[neigh]) {
+                    ap[curr] = true;
+                    // System.out.println("Ap : "+curr);
+                }
+                children++;
+            }
+        }
+
+        if(par == -1 && children > 1) {
+            ap[curr] = true;
+            // System.out.println("Ap : "+curr);
+        }
+    }
+    public static void getAP(ArrayList<Edge2> graph[], int V) {
+        int dt[] = new int[V];
+        int low[] = new int[V];
+        int time = 0;
+        boolean vis[] = new boolean[V];
+        boolean ap[] = new boolean[V];
+        for(int i=0; i<V; i++) {
+            if(!vis[i]) {
+                dfs2(graph, i, -1, dt, low, time, vis, ap);
+            }
+        }
+        // print all Aps
+        for(int i=0; i<V; i++) {
+            if(ap[i]) {
+                System.out.println("AP : "+i);
+            }
+        }
+    }
     public static void main(String[] args) {
         // int V = 7;
         // ArrayList<Edge> graph[] = new ArrayList[V];
@@ -990,6 +1041,9 @@ public class Graphs {
 
         ArrayList<Edge2> graph[] = new ArrayList[V];
         createGraph9(graph);
-        tarjanBrigde(graph, V);
+        // tarjanBrigde(graph, V);
+        getAP(graph, V);
+
+
     }
 }

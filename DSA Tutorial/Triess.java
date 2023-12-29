@@ -63,6 +63,7 @@ public class Triess {
             freq = 1;
         }
     }
+    
 
     public static Node2 root2 = new Node2();
 

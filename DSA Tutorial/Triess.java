@@ -50,6 +50,54 @@ public class Triess {
 
         return false;
     }
+
+    static class Node2 {
+        Node2[] children = new Node2[26];
+        boolean eow = false;
+        int freq;
+
+        public Node2() {
+            for(int i=0; i<children.length; i++) {
+                children[i] = null;
+            }
+            freq = 1;
+        }
+    }
+
+    public static Node2 root2 = new Node2();
+
+    public static void insert2(String word) {
+        Node2 curr = root2;
+
+        for(int i=0; i<word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if(curr.children[idx] == null) {
+                curr.children[idx] = new Node2();
+            } else {
+                curr.children[idx].freq++;
+            }
+
+            curr = curr.children[idx];
+        }
+
+        curr.eow = true;
+    }
+
+    public static void findPrefix(Node2 root, String ans) { // O(L) == L -- Longest words
+        if(root == null) {
+            return;
+        }
+        if(root.freq == 1) {
+            System.out.println(ans);
+            return;
+        }
+
+        for(int i=0; i<root.children.length; i++) {
+            if(root.children[i] != null) {
+                findPrefix(root.children[i], ans+(char)(i+'a'));
+            }
+        }
+    }
     public static void main(String[] args) {
         String words[] = {"i", "like", "sam", "samsung", "mobile", "ice"};
         for(int i=0; i<words.length; i++) {
@@ -60,5 +108,13 @@ public class Triess {
         System.out.println(wordBreak(key));
         // System.out.println(search("thee"));
         // System.out.println(search("thor"));
+
+        // find prefix
+        String arr[] = {"zebra", "dog", "duck", "dove"};
+        for(int i=0; i<arr.length; i++) {
+            insert2(arr[i]);
+        }
+        root2.freq = -1;
+        findPrefix(root2, "");
     }
 }

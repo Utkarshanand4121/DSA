@@ -64,7 +64,6 @@ public class Triess {
         }
     }
     
-
     public static Node2 root2 = new Node2();
 
     public static void insert2(String word) {
@@ -99,23 +98,48 @@ public class Triess {
             }
         }
     }
-    public static void main(String[] args) {
-        String words[] = {"i", "like", "sam", "samsung", "mobile", "ice"};
-        for(int i=0; i<words.length; i++) {
-            insert(words[i]);
-        }
+    public static boolean startsWith(String prefix) {
+        Node curr = root;
 
-        String key = "ilikesamsung";
-        System.out.println(wordBreak(key));
+        for(int i=0; i<prefix.length(); i++) {
+            int idx = prefix.charAt(i) - 'a';
+            if(curr.children[idx] == null) {
+                return false;
+            }
+            curr = curr.children[idx];
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        // String words[] = {"i", "like", "sam", "samsung", "mobile", "ice"};
+        // for(int i=0; i<words.length; i++) {
+        //     insert(words[i]);
+        // }
+
+        // String key = "ilikesamsung";
+        // System.out.println(wordBreak(key));
         // System.out.println(search("thee"));
         // System.out.println(search("thor"));
 
         // find prefix
-        String arr[] = {"zebra", "dog", "duck", "dove"};
-        for(int i=0; i<arr.length; i++) {
-            insert2(arr[i]);
+        // String arr[] = {"zebra", "dog", "duck", "dove"};
+        // for(int i=0; i<arr.length; i++) {
+        //     insert2(arr[i]);
+        // }
+        // root2.freq = -1;
+        // findPrefix(root2, "");
+
+        // startsWith
+
+        String words[] = {"apple", "app", "mango", "man", "women"};
+        String prefix1 = "app"; // true
+        String prefix2 = "moon"; // false
+
+        for(int i=0; i<words.length; i++) {
+            insert(words[i]);
         }
-        root2.freq = -1;
-        findPrefix(root2, "");
+
+        System.out.println(startsWith(prefix1));
+        System.out.println(startsWith(prefix2)); 
     }
 }

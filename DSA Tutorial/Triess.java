@@ -110,6 +110,22 @@ public class Triess {
         }
         return true;
     }
+
+    // Unique Substring
+    public static int countNodes(Node root) {
+        if(root == null) {
+            return 0;
+        }
+
+        int count = 0;
+        for(int i=0; i<26; i++) {
+            if(root.children[i] != null) {
+                count += countNodes(root.children[i]);
+            }
+        }
+
+        return count+1;
+    }
     public static void main(String[] args) {
         // String words[] = {"i", "like", "sam", "samsung", "mobile", "ice"};
         // for(int i=0; i<words.length; i++) {
@@ -131,15 +147,27 @@ public class Triess {
 
         // startsWith
 
-        String words[] = {"apple", "app", "mango", "man", "women"};
-        String prefix1 = "app"; // true
-        String prefix2 = "moon"; // false
+        // String words[] = {"apple", "app", "mango", "man", "women"};
+        // String prefix1 = "app"; // true
+        // String prefix2 = "moon"; // false
 
-        for(int i=0; i<words.length; i++) {
-            insert(words[i]);
+        // for(int i=0; i<words.length; i++) {
+        //     insert(words[i]);
+        // }
+
+        // System.out.println(startsWith(prefix1));
+        // System.out.println(startsWith(prefix2));
+        
+        // Unique Substring
+        String str = "apple"; // ans = 10
+
+        // Suffix -> insert in trie
+
+        for(int i=0; i<str.length(); i++) {
+            String suffix = str.substring(i);
+            insert(suffix);
         }
 
-        System.out.println(startsWith(prefix1));
-        System.out.println(startsWith(prefix2)); 
+        System.out.println(countNodes(root));
     }
 }

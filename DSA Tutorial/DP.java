@@ -212,29 +212,56 @@ public class DP {
     // Coin change
     public static int coinChange(int coins[], int sum) {
         int n = coins.length;
-        int dp[][] = new int[n+1][sum+1];
+        int dp[][] = new int[n + 1][sum + 1];
 
         // initialize - sum is 0
         // i -> coins; j -> sum/change
-        for(int i=0; i<n+1; i++) {
+        for (int i = 0; i < n + 1; i++) {
             dp[i][0] = 1;
         }
-        
-        for(int j=1; j<sum+1; j++) {
+
+        for (int j = 1; j < sum + 1; j++) {
             dp[0][j] = 0;
         }
         // O(N*SUM)
-        for(int i=1; i<n+1; i++) {
-            for(int j=1; j<sum+1; j++) { //valid
-                if(coins[i-1] <= j) {
-                    dp[i][j] = dp[i][j-coins[i-1]] + dp[i-1][j];
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < sum + 1; j++) { // valid
+                if (coins[i - 1] <= j) {
+                    dp[i][j] = dp[i][j - coins[i - 1]] + dp[i - 1][j];
                 } else { // invalid
-                    dp[i][j] = dp[i-1][j];
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
         return dp[n][sum];
     }
+
+    // Rod Cutting
+    public static int rodCutting(int length[], int price[], int totRod) {
+        int n = price.length;
+        int dp[][] = new int[n+1][totRod+1];
+
+        for(int i=0; i<n+1; i++) {
+            for(int j=0; j<totRod+1; j++) {
+                if(i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+
+        for(int i=1; i<n+1; i++) {
+            for(int j=1; j<totRod+1; j++) {
+                // valid
+                if(length[i-1] <= j) {
+                    // dp[i][j] = Math.max(val[i-1] + dp[i][j-wt[i-1]], dp[i-1][j]);
+                    dp[i][j] = Math.max(price[i-1] + dp[i][j-length[i-1]], dp[i-1][j]);
+                } else { // invlaid
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        return dp[n][totRod];
+    } 
     public static void main(String[] args) {
         // int n = 5;
         // int f[] = new int[n + 1]; // 0,0,0,0
@@ -270,8 +297,14 @@ public class DP {
         // System.out.println(unboundedKnapsack(val, wt, W));
 
         // Coin change
-        int coins[] = {2,5,3,6};
-        int sum = 10; // ans = 4
-        System.out.println(coinChange(coins, sum));
+        // int coins[] = {2,5,3,6};
+        // int sum = 10; // ans = 4
+        // System.out.println(coinChange(coins, sum));
+
+        // Rod Cutting
+        int length[] = {1,2,3,4,5,6,7,8};
+        int price[] = {1,5,8,9,10,17,17,20};
+        int totRod = 8;
+        System.out.println(rodCutting(length, price, totRod));
     }
 }

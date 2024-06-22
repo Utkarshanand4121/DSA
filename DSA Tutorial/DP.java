@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class DP {
 
@@ -328,6 +329,83 @@ public class DP {
         return dp[n][m];
     }
 
+    // Longest Common Substring
+    // O(n * m)
+    public static int longestCommonSubstring(String str1, String str2) {
+        int n = str1.length();
+        int m = str2.length();
+        int dp[][] = new int[n + 1][m + 1];
+
+        // initialize
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+
+        int ans = 0;
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    ans = Math.max(ans, dp[i][j]);
+                } else {
+                    dp[i][j] = 0;
+                    // here ans update is not needed
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    // Longest Increasing Subsequence
+    public static int lcss(int arr1[], int arr2[]) {
+        int n = arr1.length;
+        int m = arr2.length;
+        int dp[][] = new int[n + 1][m + 1];
+
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < m + 1; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                if (arr1[i - 1] == arr2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    int ans1 = dp[i - 1][j];
+                    int ans2 = dp[i][j - 1];
+                    dp[i][j] = Math.max(ans1, ans2);
+                }
+            }
+        }
+        return dp[n][m];
+    }
+
+    public static int lis(int arr1[]) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < arr1.length; i++) {
+            set.add(arr1[i]);
+        }
+
+        int arr2[] = new int[set.size()]; // sorted unique els
+        int i = 0;
+        for (int num : set) {
+            arr2[i] = num;
+            i++;
+        }
+
+        Arrays.sort(arr2);
+        return lcss(arr1, arr2);
+    }
+
     public static void main(String[] args) {
         // int n = 5;
         // int f[] = new int[n + 1]; // 0,0,0,0
@@ -384,15 +462,24 @@ public class DP {
         // int dp[][] = new int[n + 1][m + 1];
         // initialization
         // for (int i = 0; i < n + 1; i++) {
-        //     for (int j = 0; j < m + 1; j++) {
-        //         dp[i][j] = -1;
-        //     }
+        // for (int j = 0; j < m + 1; j++) {
+        // dp[i][j] = -1;
+        // }
         // }
         // System.out.println(lcsMemo(str1, str2, n, m, dp));
 
         // LCS Tabulation
-        String str1 = "abcde";
-        String str2 = "ace";
-        System.out.println(lcsTab(str1, str2));
+        // String str1 = "abcde";
+        // String str2 = "ace";
+        // System.out.println(lcsTab(str1, str2));
+
+        // Longest Common Substring
+        // String str1 = "ABCDE";
+        // String str2 = "ABGCE"; // ans = 2
+        // System.out.println(longestCommonSubstring(str1, str2));
+
+        // Longest Increasing Subsequence
+        int arr[] = { 50, 3, 10, 7, 40, 80 };
+        System.out.println(lis(arr));
     }
 }

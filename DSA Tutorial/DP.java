@@ -406,6 +406,51 @@ public class DP {
         return lcss(arr1, arr2);
     }
 
+    // Edit distance
+    public static int editDistance(String str1, String str2) { 
+        // O(n * m)
+
+        int n = str1.length();
+        int m = str2.length();
+        int dp[][] = new int[n+1][m+1];
+
+        for(int i=0; i<n+1; i++) {
+            for(int j=0; j<m+1; j++) {
+                if(i == 0) {
+                    dp[i][j] = j;
+                }
+                if(j == 0) {
+                    dp[i][j] = i;
+                }
+            }
+        }
+
+        for(int i=1; i<n+1; i++) {
+            for(int j=1; j<m+1; j++) {
+                if(str1.charAt(i-1) == str2.charAt(j-1)) { // same
+                    dp[i][j] = dp[i-1][j-1];
+                } else { //diff
+                    int add = dp[i][j-1] + 1;
+                    int del = dp[i-1][j] + 1;
+                    int rep = dp[i-1][j-1] + 1;
+                    
+                    dp[i][j] = Math.min(rep, Math.min(add, del));
+                }
+            }
+        }
+
+        return dp[n][m];
+    }
+
+    // String Conversion
+    public static void strConversion(String str1, String str2) {
+        int lcs = lcs(str1, str2, str1.length(), str2.length());
+
+        int deletion = str1.length() - lcs;
+        int insertion = str2.length() - lcs;
+        System.out.println("Deletion Operation : " + deletion);
+        System.out.println("Insertion Operation : " + insertion);
+    }
     public static void main(String[] args) {
         // int n = 5;
         // int f[] = new int[n + 1]; // 0,0,0,0
@@ -479,7 +524,17 @@ public class DP {
         // System.out.println(longestCommonSubstring(str1, str2));
 
         // Longest Increasing Subsequence
-        int arr[] = { 50, 3, 10, 7, 40, 80 };
-        System.out.println(lis(arr));
+        // int arr[] = { 50, 3, 10, 7, 40, 80 };
+        // System.out.println(lis(arr));
+
+        // Edit Distance
+        // String word1 = "intention";
+        // String word2 = "execution";
+        // System.out.println(editDistance(word1, word2));
+
+        // String Conversion
+        String str1 = "abcdef";
+        String str2 = "aceg";
+        strConversion(str1, str2);
     }
 }

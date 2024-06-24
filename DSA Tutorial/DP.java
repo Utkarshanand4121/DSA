@@ -407,33 +407,33 @@ public class DP {
     }
 
     // Edit distance
-    public static int editDistance(String str1, String str2) { 
+    public static int editDistance(String str1, String str2) {
         // O(n * m)
 
         int n = str1.length();
         int m = str2.length();
-        int dp[][] = new int[n+1][m+1];
+        int dp[][] = new int[n + 1][m + 1];
 
-        for(int i=0; i<n+1; i++) {
-            for(int j=0; j<m+1; j++) {
-                if(i == 0) {
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < m + 1; j++) {
+                if (i == 0) {
                     dp[i][j] = j;
                 }
-                if(j == 0) {
+                if (j == 0) {
                     dp[i][j] = i;
                 }
             }
         }
 
-        for(int i=1; i<n+1; i++) {
-            for(int j=1; j<m+1; j++) {
-                if(str1.charAt(i-1) == str2.charAt(j-1)) { // same
-                    dp[i][j] = dp[i-1][j-1];
-                } else { //diff
-                    int add = dp[i][j-1] + 1;
-                    int del = dp[i-1][j] + 1;
-                    int rep = dp[i-1][j-1] + 1;
-                    
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                if (str1.charAt(i - 1) == str2.charAt(j - 1)) { // same
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else { // diff
+                    int add = dp[i][j - 1] + 1;
+                    int del = dp[i - 1][j] + 1;
+                    int rep = dp[i - 1][j - 1] + 1;
+
                     dp[i][j] = Math.min(rep, Math.min(add, del));
                 }
             }
@@ -451,6 +451,45 @@ public class DP {
         System.out.println("Deletion Operation : " + deletion);
         System.out.println("Insertion Operation : " + insertion);
     }
+
+    // Wildcard Matching
+    public static boolean isMatch(String s, String p) { // O(n*m)
+        int n = s.length();
+        int m = p.length();
+
+        boolean dp[][] = new boolean[n + 1][m + 1];
+
+        // initialize
+        dp[0][0] = true;
+        // pattern = " "
+        for (int i = 1; i < n + 1; i++) {
+            dp[i][0] = false;
+        }
+        // s = " "
+        for (int j = 1; j < m + 1; j++) {
+            if (p.charAt(j - 1) == '*') {
+                dp[0][j] = dp[0][j - 1];
+            }
+        }
+
+        // bottom up
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                // case -> ith char == jth char || jth char == ?
+                if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?') {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else if (p.charAt(j - 1) == '*') {
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
+                } else {
+                    dp[i][j] = false;
+                }
+            }
+        }
+
+        // string -> n, pattern -> m
+        return dp[n][m];
+    }
+
     public static void main(String[] args) {
         // int n = 5;
         // int f[] = new int[n + 1]; // 0,0,0,0
@@ -533,8 +572,13 @@ public class DP {
         // System.out.println(editDistance(word1, word2));
 
         // String Conversion
-        String str1 = "abcdef";
-        String str2 = "aceg";
-        strConversion(str1, str2);
+        // String str1 = "abcdef";
+        // String str2 = "aceg";
+        // strConversion(str1, str2);
+
+        // Wildcard Matching
+        String s = "baaabab";
+        String p = "*****ba*****ab"; // true
+        System.out.println(isMatch(s, p));
     }
 }
